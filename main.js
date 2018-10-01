@@ -5,7 +5,6 @@ var bodyParser = require("body-parser");
 var compression = require("compression");
 
 //
-var cookie = require("cookie");
 var helmet = require("helmet");
 var session = require("express-session");
 var FileStore = require("session-file-store")(session);
@@ -47,7 +46,6 @@ var indexRouter = require("./routes/index");
 var topicRouter = require("./routes/topic");
 var authRouter = require("./routes/auth")(passport);
 
-// app.get('/', (req, res) => res.send("Hello World"));
 app.use("/", indexRouter);
 // 하위 router는 topic이 필요없다.
 app.use("/topic", topicRouter);
