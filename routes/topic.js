@@ -109,22 +109,23 @@ router.get("/:pageId", function(request, response, next) {
   //
   var filteredId = path.parse(request.params.pageId).base;
   fs.readFile(`data/${filteredId}`, "utf8", function(err, description) {
-    //
     if (err) {
       next(err);
     } else {
       var title = request.params.pageId;
       var sanitizedTitle = sanitizeHtml(title);
-      var sanitizeDescription = sanitizeHtml(description);
+      var sanitizedDescription = sanitizeHtml(description, {
+        allowedTags: ["h1"]
+      });
       var list = template.list(request.list);
       var html = template.HTML(
         sanitizedTitle,
         list,
-        `<h2>${sanitizedTitle}</h2>${sanitizeDescription}`,
-        ` <a href="/topic/create">create</a> 
+        `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`,
+        ` <a href="/topic/create">create</a>
             <a href="/topic/update/${sanitizedTitle}">update</a>
             <form action="/topic/delete_process" method="post">
-              <input type="hidden" name="pageId" value="${sanitizedTitle}">
+              <input type="hidden" name="id" value="${sanitizedTitle}">
               <input type="submit" value="delete">
             </form>`,
         auth.statusUI(request, response)
